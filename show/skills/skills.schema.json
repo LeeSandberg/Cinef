@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cinef.pipeline/usb/skill.schema.json",
+  "title": "Cinef USB — OpenUSD Skill Bundle",
+  "description": "Validation contract for AI skill manifests in the Cinef pipeline",
+  "type": "object",
+  "required": ["id", "version", "inputs", "outputs", "toolBindings", "validation", "creditsPolicy"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^cinef\\.skill\\.[a-z_]+$",
+      "description": "Unique skill identifier (e.g. cinef.skill.relight)"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["lighting", "compositing", "camera", "animation", "tracking", "grading"]
+    },
+    "skillFile": {
+      "type": "string",
+      "description": "Path to the .skill.md file that Claude Code uses as instructions"
+    },
+    "inputs": {
+      "type": "object",
+      "properties": {
+        "usdStage": {
+          "type": "string",
+          "description": "Path to the USD stage to operate on"
+        },
+        "media": {
+          "type": "object",
+          "properties": {
+            "rgb_plate": { "type": "string" },
+            "depth_map": { "type": "string" },
+            "audio_file": { "type": "string" },
+            "surface_map": { "type": "string" }
+          }
+        },
+        "constraints": {
+          "type": "object",
+          "properties": {
+            "fps": { "type": "number" },
+            "colorSpace": { "type": "string" },
+            "frame_range": {
+              "type": "array",
+              "items": { "type": "integer" },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        },
+        "prompt": {
+          "type": "string",
+          "description": "Natural language creative intent"
+        }
+      },
+      "required": ["usdStage"]
+    },
+    "outputs": {
+      "type": "object",
+      "required": ["usdLayerPatch"],
+      "properties": {
+        "usdLayerPatch": {
+          "type": "string",
+          "description": "Path where the override .usda layer will be written"
+        },
+        "generatedAssets": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Paths to any generated media (mattes, textures, etc.)"
+        }
+      }
+    },
+    "toolBindings": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Required execution environments"
+    },
+    "models": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "version": { "type": "string" },
+          "hash": { "type": "string" }
+        }
+      }
+    },
+    "validation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["metric", "operator", "threshold"],
+        "properties": {
+          "metric": { "type": "string" },
+          "operator": { "type": "string", "enum": ["<", ">", "<=", ">=", "=="] },
+          "threshold": { "type": "number" }
+        }
+      },
+      "description": "QC gates that must pass before commit"
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "author": { "type": "string" },
+        "model": { "type": "string" },
+        "prompt": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "environment": { "type": "string" }
+      }
+    },
+    "creditsPolicy": {
+      "type": "string",
+      "enum": ["attribution_required", "attribution_optional", "public_domain"],
+      "description": "Machine-readable credit requirement"
+    }
+  }
+}

@@ -1,0 +1,188 @@
+#usda 1.0
+# Shot 020 — Close-up Reaction (FACIAL PERFORMANCE SHOT)
+# This shot has a completely different standard than shot_010:
+#   shot_010 = lighting VariantSets + camera tracking
+#   shot_020 = performance VariantSets + facial animation + audio sync
+# Each shot owns its own skill bindings — that's the point.
+#
+# SKILL BINDINGS: Claude Code — when you parse this file, look for
+# customData blocks with "cinef:skill" entries on each prim. These
+# tell you which skills can modify that prim. This shot's skills
+# are DIFFERENT from shot_010's skills.
+(
+    doc = "Shot 020 — protagonist close-up reaction"
+    defaultPrim = "Shot_020"
+    startTimeCode = 1
+    endTimeCode = 72
+    framesPerSecond = 24
+    customLayerData = {
+        string shot_id = "shot_020"
+        string description = "Close-up — protagonist emotional reaction with dialogue"
+        string plate_path = "media/plates_proxy/shot_020.####.exr"
+        int[] frame_range = [1, 72]
+        string cinef:metaSkill = "skills/impl/meta.skill.md"
+        string cinef:gitSkill = "skills/impl/git_onboard.skill.md"
+    }
+)
+
+def Xform "Shot_020" (
+    kind = "assembly"
+    doc = "Facial performance shot — shallow DOF, blendshape-driven"
+)
+{
+    # ---------------------------------------------------------------
+    # CAMERA — NO skill binding (locked focus for close-up)
+    # Claude Code: focus is locked at 150cm for this portrait shot.
+    # Do not run focus_pull here — it's a fixed close-up.
+    # ---------------------------------------------------------------
+    def Camera "main_cam" (
+        doc = "Close-up camera — 85mm portrait, shallow DOF"
+        customData = {
+            string cinef:locked = "true"
+            string cinef:lockReason = "Fixed close-up — focus locked at 150cm, no pull needed"
+        }
+    )
+    {
+        float focalLength = 85
+        float focusDistance = 150
+        float fStop = 1.4
+        float2 clippingRange = (0.1, 10000)
+        float horizontalAperture = 36
+        float verticalAperture = 24
+    }
+
+    # ---------------------------------------------------------------
+    # PLATE — locked, no skill binding (immutable footage)
+    # ---------------------------------------------------------------
+    def Xform "plate" (
+        customData = {
+            string cinef:locked = "true"
+            string cinef:lockReason = "Source plate is immutable captured footage"
+        }
+    )
+    {
+        asset plate_source = @../../media/plates_proxy/shot_020.exr@
+        custom string colorSpace = "ACEScg"
+    }
+
+    # ---------------------------------------------------------------
+    # FACE TRACKING — bound to lipsync + pose_track skills
+    # Claude Code: this is the PRIMARY skill target for this shot.
+    # Read BOTH skill files before modifying blendshapes.
+    # The performanceVariant controls intensity — ask the user
+    # which variant to use before generating animation.
+    # ---------------------------------------------------------------
+    def Xform "face_track" (
+        doc = "Facial blendshapes — AI lip-sync and expression targets"
+        variants = {
+            string performanceVariant = "subtle"
+        }
+        prepend variantSets = "performanceVariant"
+        customData = {
+            string[] cinef:skills = ["cinef.skill.lipsync", "cinef.skill.pose_track"]
+            string[] cinef:skillFiles = ["skills/impl/lipsync.skill.md", "skills/impl/pose_track.skill.md"]
+            string cinef:lipsync_doc = "Generates blendshape animation curves from audio input"
+            string cinef:pose_track_doc = "Extracts facial motion from video plate frames"
+            string[] cinef:editableProperties = ["blendshape:jawOpen", "blendshape:mouthSmile", "blendshape:browRaise", "blendshape:eyesBlink", "intensity_multiplier"]
+            string cinef:overridePath = "shots/shot_020/ai/"
+            string cinef:variantSetName = "performanceVariant"
+            string cinef:note = "Ask user which performanceVariant (subtle/intense) before generating"
+        }
+    )
+    {
+        variantSet "performanceVariant" = {
+            "subtle" (
+                doc = "Restrained performance — internal emotion"
+            ) {
+                custom float intensity_multiplier = 0.6
+                custom float blendshape:jawOpen = 0
+                custom float blendshape:mouthSmile = 0
+                custom float blendshape:browRaise = 0
+                custom float blendshape:eyesBlink = 0
+
+                float blendshape:jawOpen.timeSamples = {
+                    1: 0.0,
+                    12: 0.15,
+                    24: 0.0,
+                    36: 0.25,
+                    48: 0.05,
+                    72: 0.0,
+                }
+                float blendshape:mouthSmile.timeSamples = {
+                    1: 0.0,
+                    24: 0.1,
+                    48: 0.0,
+                    72: 0.05,
+                }
+                float blendshape:browRaise.timeSamples = {
+                    1: 0.0,
+                    36: 0.2,
+                    72: 0.0,
+                }
+            }
+            "intense" (
+                doc = "Full emotional range — visible reaction"
+            ) {
+                custom float intensity_multiplier = 1.0
+                custom float blendshape:jawOpen = 0
+                custom float blendshape:mouthSmile = 0
+                custom float blendshape:browRaise = 0
+                custom float blendshape:eyesBlink = 0
+
+                float blendshape:jawOpen.timeSamples = {
+                    1: 0.0,
+                    12: 0.4,
+                    24: 0.0,
+                    36: 0.7,
+                    48: 0.15,
+                    72: 0.0,
+                }
+                float blendshape:mouthSmile.timeSamples = {
+                    1: 0.0,
+                    18: 0.5,
+                    36: 0.0,
+                    54: 0.3,
+                    72: 0.1,
+                }
+                float blendshape:browRaise.timeSamples = {
+                    1: 0.0,
+                    12: 0.6,
+                    36: 0.8,
+                    60: 0.2,
+                    72: 0.0,
+                }
+                float blendshape:eyesBlink.timeSamples = {
+                    1: 0.0,
+                    15: 1.0,
+                    17: 0.0,
+                    45: 1.0,
+                    47: 0.0,
+                }
+            }
+        }
+    }
+
+    # ---------------------------------------------------------------
+    # AUDIO SYNC — bound to lipsync skill (input source)
+    # Claude Code: this prim provides INPUT to the lipsync skill.
+    # It contains dialogue text, phoneme timing, and the audio file.
+    # Do not modify — this is reference data from production.
+    # ---------------------------------------------------------------
+    def Xform "audio_sync" (
+        doc = "Dialogue timing — phoneme boundaries for lip-sync AI"
+        customData = {
+            string cinef:skill = "cinef.skill.lipsync"
+            string cinef:skillFile = "skills/impl/lipsync.skill.md"
+            string cinef:role = "input"
+            string cinef:roleDoc = "This prim provides INPUT to lipsync — read it, do not override it"
+        }
+    )
+    {
+        asset audio_source = @../../media/plates_proxy/shot_020_dialogue.wav@
+        custom string dialogue_text = "I never thought it would end like this."
+        custom float[] phoneme_boundaries = [0.0, 0.3, 0.5, 0.8, 1.1, 1.4, 1.7, 2.0, 2.3, 2.6, 2.9]
+        custom string[] phoneme_labels = ["AY", "N", "EH", "V", "ER", "TH", "AO", "T", "IH", "T", "sil"]
+        custom float dialogue_start_frame = 8
+        custom float dialogue_end_frame = 62
+    }
+}

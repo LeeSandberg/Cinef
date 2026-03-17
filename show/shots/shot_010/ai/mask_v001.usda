@@ -1,0 +1,24 @@
+#usda 1.0
+# AI-generated segmentation mask
+(
+    doc = "AI Segmentation — Isolate protagonist for selective grading"
+    customLayerData = {
+        string author = "cinef.skill.segment"
+        string model = "claude-opus-4-6"
+        string prompt = "Isolate protagonist for selective grading"
+        string timestamp = "2026-03-17T09:23:59.096774+00:00"
+        string skillId = "cinef.skill.segment"
+        string version = "1.0.0"
+        bool qcPassed = true
+    }
+)
+
+over "Shot_010" {
+    def Xform "masks" {
+        def Xform "protagonist_mask" {
+            asset matte_sequence = @../../media/plates_proxy/shot_010_protagonist_mask.####.exr@
+            custom string target = "protagonist"
+            custom int[] frame_range = [1, 96]
+        }
+    }
+}

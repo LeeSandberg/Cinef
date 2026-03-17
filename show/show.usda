@@ -1,0 +1,70 @@
+#usda 1.0
+# Cinef — Simplified OpenUSD Root Stage (Educational Demo)
+# This is the "Canon" — the immutable root composition.
+# All modifications happen as sublayered overrides, never here.
+(
+    doc = "Cinef Demo Show — AI-Augmented Film Pipeline"
+    metersPerUnit = 0.01
+    upAxis = "Y"
+    defaultPrim = "Show"
+    startTimeCode = 1
+    endTimeCode = 240
+    framesPerSecond = 24
+    subLayers = [
+        # AI override layers are composed here (strongest-to-weakest)
+        # @./shots/shot_010/ai/relight_v001.usda@
+        # @./shots/shot_010/ai/mask_v001.usda@
+    ]
+    customLayerData = {
+        string show = "CinefDemo"
+        string pipeline_version = "0.1.0"
+        string creator = "Cinef Pipeline"
+        string created = "2026-03-17"
+        # Claude Code: start here. Read the meta-skill first, then
+        # parse each shot's base.usda to discover per-prim skill bindings.
+        string cinef:metaSkill = "skills/impl/meta.skill.md"
+        string cinef:skillRegistry = "skills/skills.usda"
+        string cinef:skillSchema = "skills/skills.schema.json"
+        string cinef:instructions = "Parse each referenced shot. Look for cinef:skill and cinef:skills in customData on prims. Read the linked skill.md before modifying any prim."
+    }
+)
+
+def Xform "Show" (
+    kind = "assembly"
+    doc = "Top-level show container"
+)
+{
+    def Xform "Sequences"
+    {
+        def Xform "seq_010" (
+            doc = "Opening sequence"
+        )
+        {
+            # Shots reference their own base.usda — modular composition
+            def "shot_010" (
+                references = [ @./shots/shot_010/base.usda@ ]
+                doc = "Establishing wide — protagonist enters"
+            )
+            {
+            }
+
+            def "shot_020" (
+                references = [ @./shots/shot_020/base.usda@ ]
+                doc = "Close-up — protagonist reaction"
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "Assets" (
+        doc = "Shared asset library (referenced by shots)"
+    )
+    {
+        def "protagonist" (
+            references = [ @./assets/protagonist.usda@ ]
+        )
+        {
+        }
+    }
+}

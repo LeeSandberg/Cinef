@@ -1,0 +1,31 @@
+#usda 1.0
+# AI-generated focus pull override
+# This layer composes non-destructively over the shot base.
+(
+    doc = "AI Focus Pull — Track focus on the protagonist through shot 010 — rack from wide to close"
+    customLayerData = {
+        string author = "cinef.skill.focus_pull"
+        string model = "claude-opus-4-6"
+        string prompt = "Track focus on the protagonist through shot 010 — rack from wide to close"
+        string timestamp = "2026-03-17T11:14:07.859722+00:00"
+        string skillId = "cinef.skill.focus_pull"
+        string version = "1.0.0"
+        bool qcPassed = true
+    }
+)
+
+over "Shot_010" {
+    over "main_cam" {
+        float focusDistance.timeSamples = {
+            1: 500.0,
+            12: 450.0,
+            24: 380.0,
+            36: 300.0,
+            48: 250.0,
+            60: 210.0,
+            72: 180.0,
+            84: 160.0,
+            96: 150.0,
+        }
+    }
+}

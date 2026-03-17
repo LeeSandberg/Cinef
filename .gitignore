@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Heavy media (would be Git LFS in production)
+*.exr
+*.hdr
+*.mov
+*.mp4
+*.wav
+
+# Temp
+*.tmp
+*.bak

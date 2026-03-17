@@ -1,0 +1,153 @@
+#usda 1.0
+# Shot 010 — Establishing Wide
+# IMMUTABLE base layer. AI overrides go in ./ai/ subdirectory.
+#
+# SKILL BINDINGS: Claude Code — when you parse this file, look for
+# customData blocks with "cinef:skill" entries on each prim. These
+# tell you which skills can modify that prim and how to find the
+# skill instructions. Read the skill.md before making any changes.
+(
+    doc = "Shot 010 base plate and camera"
+    defaultPrim = "Shot_010"
+    startTimeCode = 1
+    endTimeCode = 96
+    framesPerSecond = 24
+    customLayerData = {
+        string shot_id = "shot_010"
+        string description = "Wide establishing shot — protagonist enters frame left"
+        string plate_path = "media/plates_proxy/shot_010.####.exr"
+        int[] frame_range = [1, 96]
+        string cinef:metaSkill = "skills/impl/meta.skill.md"
+        string cinef:gitSkill = "skills/impl/git_onboard.skill.md"
+    }
+)
+
+def Xform "Shot_010" (
+    kind = "assembly"
+    doc = "Shot 010 root"
+)
+{
+    # ---------------------------------------------------------------
+    # CAMERA — bound to focus_pull skill
+    # Claude Code: read skills/impl/focus_pull.skill.md before
+    # modifying focusDistance or fStop on this prim.
+    # ---------------------------------------------------------------
+    def Camera "main_cam" (
+        doc = "Primary camera — 35mm, wide angle"
+        customData = {
+            string cinef:skill = "cinef.skill.focus_pull"
+            string cinef:skillFile = "skills/impl/focus_pull.skill.md"
+            string cinef:skillDoc = "Adjusts focusDistance and fStop from tracking data"
+            string[] cinef:editableProperties = ["focusDistance", "fStop"]
+            string cinef:overridePath = "shots/shot_010/ai/"
+        }
+    )
+    {
+        float focalLength = 35
+        float focusDistance = 500
+        float fStop = 2.8
+        float2 clippingRange = (0.1, 10000)
+        float horizontalAperture = 36
+        float verticalAperture = 24
+        # Time-sampled focus pull (AI can override these)
+        float focusDistance.timeSamples = {
+            1: 500,
+            48: 350,
+            96: 200,
+        }
+    }
+
+    # ---------------------------------------------------------------
+    # PLATE — locked, no skill binding (immutable footage)
+    # Claude Code: do NOT modify this prim. It is the source plate.
+    # ---------------------------------------------------------------
+    def Xform "plate" (
+        doc = "Background plate — locked footage, DO NOT OVERRIDE"
+        customData = {
+            string cinef:locked = "true"
+            string cinef:lockReason = "Source plate is immutable captured footage"
+        }
+    )
+    {
+        asset plate_source = @../../media/plates_proxy/shot_010.exr@
+        custom string colorSpace = "ACEScg"
+    }
+
+    # ---------------------------------------------------------------
+    # LIGHTING — bound to relight skill
+    # Claude Code: read skills/impl/relight.skill.md before
+    # modifying lights. Add new variants, don't replace existing ones.
+    # ---------------------------------------------------------------
+    def Xform "lighting" (
+        variants = {
+            string lightingVariant = "natural"
+        }
+        prepend variantSets = "lightingVariant"
+        customData = {
+            string cinef:skill = "cinef.skill.relight"
+            string cinef:skillFile = "skills/impl/relight.skill.md"
+            string cinef:skillDoc = "Generates lighting override layers and new VariantSet options"
+            string[] cinef:editableProperties = ["intensity", "color", "angle", "xformOp:rotateXYZ"]
+            string cinef:overridePath = "shots/shot_010/ai/"
+            string cinef:variantSetName = "lightingVariant"
+        }
+    )
+    {
+        variantSet "lightingVariant" = {
+            "natural" {
+                def DomeLight "env_light" {
+                    float intensity = 1.0
+                    asset texture:file = @../../media/plates_proxy/shot_010_env.hdr@
+                    color3f color = (1, 1, 1)
+                }
+                def DistantLight "key_light" {
+                    float intensity = 1.5
+                    float angle = 1.0
+                    color3f color = (1.0, 0.95, 0.9)
+                    float3 xformOp:rotateXYZ = (45, -30, 0)
+                    uniform token[] xformOpOrder = ["xformOp:rotateXYZ"]
+                }
+            }
+            "dramatic" {
+                def DomeLight "env_light" {
+                    float intensity = 0.3
+                    asset texture:file = @../../media/plates_proxy/shot_010_env.hdr@
+                    color3f color = (0.7, 0.75, 1.0)
+                }
+                def DistantLight "key_light" {
+                    float intensity = 3.0
+                    float angle = 0.5
+                    color3f color = (1.0, 0.8, 0.6)
+                    float3 xformOp:rotateXYZ = (60, -45, 0)
+                    uniform token[] xformOpOrder = ["xformOp:rotateXYZ"]
+                }
+            }
+        }
+    }
+
+    # ---------------------------------------------------------------
+    # TRACKING — bound to segment + pose_track skills
+    # Claude Code: this prim feeds TWO skills. Segmentation creates
+    # masks from the tracked position. Pose tracking updates the
+    # transforms themselves from video analysis.
+    # ---------------------------------------------------------------
+    def Xform "protagonist_track" (
+        doc = "Tracked position of protagonist — AI updates these transforms"
+        customData = {
+            string[] cinef:skills = ["cinef.skill.segment", "cinef.skill.pose_track"]
+            string[] cinef:skillFiles = ["skills/impl/segment.skill.md", "skills/impl/pose_track.skill.md"]
+            string cinef:segment_doc = "Uses tracked position to generate isolation masks"
+            string cinef:pose_track_doc = "Updates these transforms from video plate analysis"
+            string[] cinef:editableProperties = ["xformOp:translate"]
+            string cinef:overridePath = "shots/shot_010/ai/"
+        }
+    )
+    {
+        double3 xformOp:translate.timeSamples = {
+            1: (-300, 0, 0),
+            48: (0, 0, -100),
+            96: (200, 0, -50),
+        }
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}

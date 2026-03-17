@@ -1,0 +1,135 @@
+#usda 1.0
+# USB — OpenUSD Skill Bundle Registry
+# This layer can be sublayered into any stage to query available AI skills.
+# Each skill is a Prim with metadata defining its contract.
+(
+    doc = "Cinef AI Skill Registry (USB Format)"
+    customLayerData = {
+        string registry_version = "0.1.0"
+        string pipeline = "Cinef"
+    }
+)
+
+def Scope "Skills" (
+    doc = "Top-level skill registry"
+)
+{
+    def Scope "relight" (
+        doc = "AI Relighting — generates lighting override layers"
+        customData = {
+            string id = "cinef.skill.relight"
+            string version = "1.0.0"
+            string category = "lighting"
+            string skillFile = "skills/impl/relight.skill.md"
+            string[] inputs = ["usdStage", "rgb_plate", "surface_map"]
+            string[] outputs = ["usdLayerPatch", "light_rig"]
+            string[] toolBindings = ["python-usd-api"]
+            string[] validation = ["temporal_flicker < 0.05", "color_shift < 0.02"]
+            string creditsPolicy = "attribution_required"
+        }
+    )
+    {
+    }
+
+    def Scope "segment" (
+        doc = "AI Object Segmentation — generates matte layers"
+        customData = {
+            string id = "cinef.skill.segment"
+            string version = "1.0.0"
+            string category = "compositing"
+            string skillFile = "skills/impl/segment.skill.md"
+            string[] inputs = ["usdStage", "rgb_plate", "text_prompt"]
+            string[] outputs = ["usdLayerPatch", "matte_sequence"]
+            string[] toolBindings = ["python-usd-api"]
+            string[] validation = ["edge_leakage < 0.03", "temporal_coherence > 0.95"]
+            string creditsPolicy = "attribution_required"
+        }
+    )
+    {
+    }
+
+    def Scope "focus_pull" (
+        doc = "AI Depth-of-Field — adjusts camera focus from tracking data"
+        customData = {
+            string id = "cinef.skill.focus_pull"
+            string version = "1.0.0"
+            string category = "camera"
+            string skillFile = "skills/impl/focus_pull.skill.md"
+            string[] inputs = ["usdStage", "depth_map", "track_target"]
+            string[] outputs = ["usdLayerPatch"]
+            string[] toolBindings = ["python-usd-api"]
+            string[] validation = ["focus_accuracy > 0.98"]
+            string creditsPolicy = "attribution_required"
+        }
+    )
+    {
+    }
+
+    def Scope "lipsync" (
+        doc = "AI Lip-Sync — generates blendshape animation from audio"
+        customData = {
+            string id = "cinef.skill.lipsync"
+            string version = "1.0.0"
+            string category = "animation"
+            string skillFile = "skills/impl/lipsync.skill.md"
+            string[] inputs = ["usdStage", "audio_file", "target_rig"]
+            string[] outputs = ["usdLayerPatch", "blendshape_curves"]
+            string[] toolBindings = ["python-usd-api"]
+            string[] validation = ["sync_accuracy > 0.90", "temporal_smoothness > 0.95"]
+            string creditsPolicy = "attribution_required"
+        }
+    )
+    {
+    }
+
+    def Scope "pose_track" (
+        doc = "AI Pose Tracking — extracts skeleton animation from video"
+        customData = {
+            string id = "cinef.skill.pose_track"
+            string version = "1.0.0"
+            string category = "animation"
+            string skillFile = "skills/impl/pose_track.skill.md"
+            string[] inputs = ["usdStage", "video_plate"]
+            string[] outputs = ["usdLayerPatch", "skeleton_animation"]
+            string[] toolBindings = ["python-usd-api"]
+            string[] validation = ["joint_jitter < 0.02", "occlusion_recovery > 0.85"]
+            string creditsPolicy = "attribution_required"
+        }
+    )
+    {
+    }
+
+    def Scope "meta" (
+        doc = "Meta-Skill — governs selection, evaluation, improvement, and creation of all other skills"
+        customData = {
+            string id = "cinef.skill.meta"
+            string version = "1.0.0"
+            string category = "system"
+            string skillFile = "skills/impl/meta.skill.md"
+            string[] inputs = ["task_description", "skill_registry"]
+            string[] outputs = ["skill_selection", "skill_update", "new_skill"]
+            string[] toolBindings = ["claude-code"]
+            string[] validation = []
+            string creditsPolicy = "public_domain"
+        }
+    )
+    {
+    }
+
+    def Scope "git_onboard" (
+        doc = "Git Onboarding — helps new users set up git, GitHub, and learn the workflow"
+        customData = {
+            string id = "cinef.skill.git_onboard"
+            string version = "1.0.0"
+            string category = "onboarding"
+            string skillFile = "skills/impl/git_onboard.skill.md"
+            string[] inputs = ["project_path"]
+            string[] outputs = ["initialized_repo"]
+            string[] toolBindings = ["git-cli", "gh-cli"]
+            string[] validation = []
+            string creditsPolicy = "public_domain"
+        }
+    )
+    {
+    }
+}

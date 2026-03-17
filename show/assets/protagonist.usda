@@ -1,0 +1,42 @@
+#usda 1.0
+# Protagonist Asset — Reusable character definition
+(
+    doc = "Protagonist character asset"
+    defaultPrim = "Protagonist"
+    customLayerData = {
+        string asset_type = "character"
+        string asset_id = "protagonist_001"
+    }
+)
+
+def Xform "Protagonist" (
+    kind = "component"
+    doc = "Protagonist character rig + geometry"
+)
+{
+    def Mesh "body_geo" {
+        custom string role = "render_geometry"
+        custom string lod = "proxy"
+    }
+
+    def Skeleton "skeleton" {
+        uniform token[] joints = [
+            "Hips", "Hips/Spine", "Hips/Spine/Chest",
+            "Hips/Spine/Chest/Neck", "Hips/Spine/Chest/Neck/Head",
+            "Hips/Spine/Chest/LeftArm", "Hips/Spine/Chest/RightArm",
+            "Hips/LeftLeg", "Hips/RightLeg"
+        ]
+    }
+
+    def BlendShape "face_shapes" (
+        doc = "Facial blendshapes for lip-sync and expression"
+    )
+    {
+        uniform token[] targets = [
+            "jawOpen", "mouthSmile", "mouthFrown",
+            "browRaise", "browFurrow",
+            "eyesBlink", "eyesWide",
+            "cheekPuff", "noseWrinkle"
+        ]
+    }
+}

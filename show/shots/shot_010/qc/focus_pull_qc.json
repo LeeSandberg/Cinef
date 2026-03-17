@@ -1,0 +1,15 @@
+{
+  "skill_id": "cinef.skill.focus_pull",
+  "shot_id": "shot_010",
+  "timestamp": "2026-03-17T11:14:07.872482+00:00",
+  "passed": true,
+  "metrics": [
+    {
+      "name": "focus_accuracy",
+      "value": 0.993,
+      "threshold": 0.98,
+      "operator": ">",
+      "passed": true
+    }
+  ]
+}
