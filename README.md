@@ -471,3 +471,18 @@ Every AI-generated layer includes provenance metadata:
 - [Transfer Oracle](https://transferoracle.ai) — Validate model transfer before deployment
 - [Operator](https://operator.droidtech.ai) — AI operations platform
 
+## License
+
+Copyright 2026 Lee Sandberg
+
+This project is licensed under the **GNU Affero General Public License v3.0** (AGPL-3.0).
+See [LICENSE](LICENSE) for the full text.
+
+This means:
+- You can use, modify, and distribute this code freely
+- Any derivative work must also be open-sourced under AGPL-3.0
+- If you run a modified version as a network service, you must share the source
+- Attribution is required
+
+**Want a different license?** For commercial licensing, proprietary use, or custom
+arrangements, contact **lee.sandberg@gmail.com** with subject line **"Cinef"**.
