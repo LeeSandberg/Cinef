@@ -450,10 +450,42 @@ Every AI-generated layer includes provenance metadata:
 - **Swedish Moral Rights**: Patch-layer authorship preserves contributor attribution
 - **C2PA**: Content Credentials for tamper-proof lineage (production extension)
 
+## Acknowledgments
+
+This project builds on the work of extraordinary teams and open standards:
+
+- **[Pixar Animation Studios](https://graphics.pixar.com/)** — Created Universal Scene Description
+  (USD), the foundational format this project is built on. USD was originally developed for
+  Pixar's internal production pipeline and open-sourced in 2016. Cinef is a simplified educational
+  reimplementation and does not include Pixar's USD source code.
+  OpenUSD is licensed under the [TOST License (Tomorrow Open Source Technology License 1.0)](https://github.com/PixarAnimationStudios/OpenUSD/blob/release/LICENSE.txt).
+
+- **[Alliance for OpenUSD (AOUSD)](https://aousd.org/)** — The joint effort by Pixar, Apple,
+  Autodesk, Adobe, and NVIDIA to standardize and evolve USD as an open ecosystem. AOUSD operates
+  under the [Academy Software Foundation (ASWF)](https://www.aswf.io/) / Linux Foundation umbrella.
+
+- **[Academy Software Foundation (ASWF)](https://www.aswf.io/)** — Hosts OpenUSD and other
+  critical open-source projects for the film and media industry including OpenEXR, OpenColorIO,
+  OpenTimelineIO, and MaterialX.
+
+- **[Anthropic](https://www.anthropic.com/)** — Creator of Claude and Claude Code, the AI
+  coding tool that serves as the agent in this pipeline. Claude Code's tool-use architecture
+  and CLAUDE.md system make the skill-binding pattern possible.
+
+- **[C2PA (Coalition for Content Provenance and Authenticity)](https://c2pa.org/)** — The
+  content credentials standard referenced in the provenance system for tamper-proof attribution.
+
+- **[Droidtech 42 AI Labs AB](https://operator.droidtech.ai)** — Developer of
+  [Transfer Oracle](https://transferoracle.ai) (model transfer validation) and the
+  [Operator](https://operator.droidtech.ai) platform. The Transfer Oracle integration
+  in `advanced/` demonstrates pre-commit model validation as a QC gate in the pipeline.
+
 ## Links & References
 
 **Pipeline & Formats:**
 - [OpenUSD Documentation](https://openusd.org/release/index.html)
+- [OpenUSD Source (Pixar)](https://github.com/PixarAnimationStudios/OpenUSD)
+- [Alliance for OpenUSD (AOUSD)](https://aousd.org/)
 - [OpenTimelineIO](https://opentimeline.io/)
 - [ASWF (Academy Software Foundation)](https://www.aswf.io/)
 - [C2PA Content Credentials](https://c2pa.org/)
