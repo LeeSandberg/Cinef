@@ -34,6 +34,11 @@ shot_020/base.usda                        (completely different skills!)
 The AI discovers what to do by reading the scene itself.
 Each shot is its own standard. The scene IS the pipeline.
 
+Skills are **variant-aware** — each VariantSet option carries its own skill
+configuration, constraints, and QC thresholds baked directly into the USD file.
+The "dramatic" lighting variant and the "natural" variant are governed by the
+same skill but with different rules. See [DEEP_DIVE.md](DEEP_DIVE.md#variant-aware-skills).
+
 ## Try It
 
 Get [Claude Code](https://docs.anthropic.com/en/docs/claude-code), open

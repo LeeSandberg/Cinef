@@ -93,6 +93,21 @@ def Xform "Shot_020" (
         variantSet "performanceVariant" = {
             "subtle" (
                 doc = "Restrained performance — internal emotion"
+                customData = {
+                    string cinef:skill = "cinef.skill.lipsync"
+                    string cinef:skillVariant = "subtle"
+                    string cinef:skillRef = "skills/impl/lipsync.skill.md#subtle"
+                    string cinef:variantDoc = "Restrained, internal emotion — micro-expressions only"
+                    float cinef:intensity_multiplier = 0.6
+                    float cinef:jawOpen_max = 0.3
+                    float cinef:mouthSmile_max = 0.2
+                    float cinef:browRaise_max = 0.25
+                    float cinef:eyesBlink_max = 0.5
+                    string[] cinef:constraints = ["blendshape peaks <= 0.3", "no sudden jumps > 0.1 per frame", "prefer holds over movement"]
+                    float cinef:qc_sync_accuracy_threshold = 0.90
+                    float cinef:qc_temporal_smoothness_threshold = 0.97
+                    string cinef:pose_track_ref = "skills/impl/pose_track.skill.md#subtle"
+                }
             ) {
                 custom float intensity_multiplier = 0.6
                 custom float blendshape:jawOpen = 0
@@ -122,6 +137,21 @@ def Xform "Shot_020" (
             }
             "intense" (
                 doc = "Full emotional range — visible reaction"
+                customData = {
+                    string cinef:skill = "cinef.skill.lipsync"
+                    string cinef:skillVariant = "intense"
+                    string cinef:skillRef = "skills/impl/lipsync.skill.md#intense"
+                    string cinef:variantDoc = "Full emotional range — broad expressions, visible reaction"
+                    float cinef:intensity_multiplier = 1.0
+                    float cinef:jawOpen_max = 0.8
+                    float cinef:mouthSmile_max = 0.6
+                    float cinef:browRaise_max = 0.9
+                    float cinef:eyesBlink_max = 1.0
+                    string[] cinef:constraints = ["blendshape peaks up to 1.0 allowed", "allow jumps up to 0.3 per frame for impact", "blinks must complete within 3 frames"]
+                    float cinef:qc_sync_accuracy_threshold = 0.90
+                    float cinef:qc_temporal_smoothness_threshold = 0.93
+                    string cinef:pose_track_ref = "skills/impl/pose_track.skill.md#intense"
+                }
             ) {
                 custom float intensity_multiplier = 1.0
                 custom float blendshape:jawOpen = 0

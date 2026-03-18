@@ -39,8 +39,56 @@ over "Shot_###" {
 }
 ```
 
+## Variant-Specific Execution
+
+Before executing, read the active `lightingVariant` on the target prim and
+find the `cinef:skillVariant` in its `customData`. Jump to the matching
+section below for variant-specific constraints and defaults.
+
+### natural
+
+**Intent:** Balanced daylight — even illumination, neutral color temperature.
+
+| Parameter | Constraint |
+|---|---|
+| Intensity range | 0.5 – 2.0 |
+| Color temp hint | 5500K–6500K (daylight) |
+| Key-to-fill ratio | ≤ 2:1 |
+| Color cast | No deviation > 0.05 from (1,1,1) |
+
+**QC thresholds (stricter for natural):**
+- `temporal_flicker < 0.05`
+- `color_shift < 0.02`
+
+**Execution notes:**
+- Preserve neutral white balance — the audience should not notice the lighting
+- Fill shadows gently; avoid harsh contrast
+- When in doubt, less is more
+
+### dramatic
+
+**Intent:** High contrast, cinematic drama — warm key, cool fill, deep shadows.
+
+| Parameter | Constraint |
+|---|---|
+| Intensity range | 0.1 – 5.0 |
+| Color temp hint | 2700K–4000K warm key, 7000K+ cool fill |
+| Key-to-fill ratio | ≥ 3:1 |
+| Shadow density | > 0.6 |
+
+**QC thresholds (relaxed for dramatic):**
+- `temporal_flicker < 0.08`
+- `color_shift < 0.05`
+
+**Execution notes:**
+- Color cast is intentional — warm key, cool fill creates depth
+- Push contrast; the audience should *feel* the lighting
+- Allow specular highlights to clip if it serves the mood
+
 ## Constraints
 - NEVER modify the base.usda — only create override layers
 - Use VariantSet "lightingVariant" when creating alternative looks
 - Preserve color space (ACEScg unless explicitly changed)
 - Layer filename must include version number: `relight_v###.usda`
+- **Always read the active variant's `customData` for constraints before executing**
+- If the variant has `cinef:constraints`, those override the defaults above

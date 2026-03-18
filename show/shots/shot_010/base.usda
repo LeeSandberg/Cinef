@@ -94,7 +94,21 @@ def Xform "Shot_010" (
     )
     {
         variantSet "lightingVariant" = {
-            "natural" {
+            "natural" (
+                doc = "Naturalistic daylight — balanced, even illumination"
+                customData = {
+                    string cinef:skill = "cinef.skill.relight"
+                    string cinef:skillVariant = "natural"
+                    string cinef:skillRef = "skills/impl/relight.skill.md#natural"
+                    string cinef:variantDoc = "Balanced daylight look — preserve neutral color temp"
+                    float cinef:intensityRange_min = 0.5
+                    float cinef:intensityRange_max = 2.0
+                    string cinef:colorTempHint = "5500K-6500K daylight"
+                    string[] cinef:constraints = ["preserve neutral white balance", "no color cast > 0.05 deviation from (1,1,1)"]
+                    float cinef:qc_temporal_flicker_threshold = 0.05
+                    float cinef:qc_color_shift_threshold = 0.02
+                }
+            ) {
                 def DomeLight "env_light" {
                     float intensity = 1.0
                     asset texture:file = @../../media/plates_proxy/shot_010_env.hdr@
@@ -108,7 +122,21 @@ def Xform "Shot_010" (
                     uniform token[] xformOpOrder = ["xformOp:rotateXYZ"]
                 }
             }
-            "dramatic" {
+            "dramatic" (
+                doc = "High-contrast dramatic lighting — deep shadows, warm key"
+                customData = {
+                    string cinef:skill = "cinef.skill.relight"
+                    string cinef:skillVariant = "dramatic"
+                    string cinef:skillRef = "skills/impl/relight.skill.md#dramatic"
+                    string cinef:variantDoc = "High contrast, warm key, cool fill — cinematic drama"
+                    float cinef:intensityRange_min = 0.1
+                    float cinef:intensityRange_max = 5.0
+                    string cinef:colorTempHint = "2700K-4000K warm key, 7000K+ cool fill"
+                    string[] cinef:constraints = ["key-to-fill ratio >= 3:1", "allow color cast for mood", "shadow density > 0.6"]
+                    float cinef:qc_temporal_flicker_threshold = 0.08
+                    float cinef:qc_color_shift_threshold = 0.05
+                }
+            ) {
                 def DomeLight "env_light" {
                     float intensity = 0.3
                     asset texture:file = @../../media/plates_proxy/shot_010_env.hdr@

@@ -15,10 +15,10 @@ def Scope "Skills" (
 )
 {
     def Scope "relight" (
-        doc = "AI Relighting — generates lighting override layers"
+        doc = "AI Relighting — generates lighting override layers (variant-aware)"
         customData = {
             string id = "cinef.skill.relight"
-            string version = "1.0.0"
+            string version = "1.1.0"
             string category = "lighting"
             string skillFile = "skills/impl/relight.skill.md"
             string[] inputs = ["usdStage", "rgb_plate", "surface_map"]
@@ -26,6 +26,9 @@ def Scope "Skills" (
             string[] toolBindings = ["python-usd-api"]
             string[] validation = ["temporal_flicker < 0.05", "color_shift < 0.02"]
             string creditsPolicy = "attribution_required"
+            bool variantAware = true
+            string variantSetName = "lightingVariant"
+            string[] knownVariants = ["natural", "dramatic"]
         }
     )
     {
@@ -66,10 +69,10 @@ def Scope "Skills" (
     }
 
     def Scope "lipsync" (
-        doc = "AI Lip-Sync — generates blendshape animation from audio"
+        doc = "AI Lip-Sync — generates blendshape animation from audio (variant-aware)"
         customData = {
             string id = "cinef.skill.lipsync"
-            string version = "1.0.0"
+            string version = "1.1.0"
             string category = "animation"
             string skillFile = "skills/impl/lipsync.skill.md"
             string[] inputs = ["usdStage", "audio_file", "target_rig"]
@@ -77,6 +80,9 @@ def Scope "Skills" (
             string[] toolBindings = ["python-usd-api"]
             string[] validation = ["sync_accuracy > 0.90", "temporal_smoothness > 0.95"]
             string creditsPolicy = "attribution_required"
+            bool variantAware = true
+            string variantSetName = "performanceVariant"
+            string[] knownVariants = ["subtle", "intense"]
         }
     )
     {

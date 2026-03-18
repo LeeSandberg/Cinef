@@ -7,7 +7,7 @@
         string author = "cinef.skill.focus_pull"
         string model = "claude-opus-4-6"
         string prompt = "Track focus on the protagonist through shot 010 — rack from wide to close"
-        string timestamp = "2026-03-17T11:14:07.859722+00:00"
+        string timestamp = "2026-03-17T13:18:34.305397+00:00"
         string skillId = "cinef.skill.focus_pull"
         string version = "1.0.0"
         bool qcPassed = true

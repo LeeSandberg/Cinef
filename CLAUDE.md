@@ -104,11 +104,27 @@ When creating or modifying skills:
 - Heavy media (EXR, HDR, MOV) goes through Git LFS — never commit raw media to the repo
 - For new users, read `show/skills/impl/git_onboard.skill.md` and guide them through setup
 
+## Variant-Aware Skills
+
+Skills are variant-aware — each VariantSet option carries its own skill
+configuration baked into the USD file's `customData`:
+
+- `cinef:skillVariant` — which variant is active
+- `cinef:skillRef` — pointer to the variant section in skill.md (e.g., `relight.skill.md#dramatic`)
+- `cinef:constraints` — variant-specific hard rules
+- `cinef:qc_*` — variant-specific QC thresholds
+
+**Before executing any skill on a prim with a VariantSet:**
+1. Read the active variant's `customData` for `cinef:skillVariant`
+2. Read the `cinef:skillRef` section in the skill.md
+3. Use the variant's QC thresholds (they may differ from the skill defaults)
+4. If USD constraints and skill.md conflict, USD wins for parameters, skill.md wins for execution approach
+
 ## Each Scene Is Its Own Standard
 
 Different shots have different skill bindings, variant sets, and concerns:
-- shot_010: camera (focus_pull) + lighting (relight) + tracking (segment, pose_track)
-- shot_020: facial performance (lipsync, pose_track) + audio sync — camera is LOCKED
+- shot_010: camera (focus_pull) + lighting (relight with natural/dramatic variants) + tracking (segment, pose_track)
+- shot_020: facial performance (lipsync with subtle/intense variants, pose_track) + audio sync — camera is LOCKED
 
 The USD LayerStack handles composition without conflict. When a user extends
 a shot's format, document it with skill bindings so the next session discovers it.

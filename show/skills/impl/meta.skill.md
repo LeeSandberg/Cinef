@@ -35,18 +35,58 @@ If the intent doesn't clearly match one skill:
 
 If the intent requires multiple skills, see Section 6 (Chaining).
 
+## 1b. Variant-Aware Skill Selection
+
+After identifying the skill, check whether the target prim uses a VariantSet:
+
+1. **Read the active variant** — check `variants = { string X = "Y" }` on the prim
+2. **Find the variant's `customData`** — look inside the active variant block for:
+   - `cinef:skill` — confirms the skill binding
+   - `cinef:skillVariant` — the variant name (e.g., "dramatic", "subtle")
+   - `cinef:skillRef` — pointer to the variant-specific section in the skill.md
+     (e.g., `skills/impl/relight.skill.md#dramatic`)
+   - `cinef:constraints` — variant-specific hard rules
+   - `cinef:qc_*` — variant-specific QC thresholds
+3. **Read the variant section in skill.md** — jump to the `### {variant}` heading
+   in the skill.md file for execution notes, parameter ranges, and QC overrides
+4. **Variant constraints override defaults** — if the variant's `customData`
+   specifies tighter or looser thresholds, use those instead of the skill defaults
+
+**The USD file is the source of truth for _what_ and _where_.**
+**The skill.md is the source of truth for _how_.**
+Both must agree — if they conflict, flag it to the user.
+
+### Discovery Flow
+
+```
+base.usda → prim → variants → active variant
+  |                              |
+  cinef:skill (prim-level)       cinef:skillVariant + cinef:skillRef
+  = which skill to use           = which variant section to read
+                                  cinef:constraints = guardrails
+                                  cinef:qc_* = thresholds
+                                      |
+                              skill.md#variant → execution notes
+```
+
 ## 2. Skill Execution Checklist
 
 Before executing any skill, verify:
 
 - [ ] Read the skill.md file completely (not just the name)
 - [ ] Read the target shot's base.usda to understand the scene
+- [ ] **Check for active VariantSet — read the variant's `customData` for
+      variant-specific skill bindings, constraints, and QC thresholds**
+- [ ] **If `cinef:skillRef` points to a variant section (e.g., `#dramatic`),
+      read that section of the skill.md for variant-specific execution notes**
 - [ ] Check for existing override layers in the shot's ai/ directory
       (avoid version conflicts — increment the version number)
 - [ ] Confirm the output path follows naming convention:
       `{skill_name}_v{###}.usda`
-- [ ] After execution, run QC validation per the skill's validation rules
+- [ ] After execution, run QC validation per the **variant's** thresholds
+      (fall back to skill defaults if no variant overrides exist)
 - [ ] Write provenance into the override layer's customLayerData
+      (include `skillVariant` if executing within a variant context)
 - [ ] Write QC report to the shot's qc/ directory
 - [ ] Never modify base.usda — only create override layers
 

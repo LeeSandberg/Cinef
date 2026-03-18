@@ -1,29 +1,29 @@
 {
   "skill_id": "cinef.skill.segment",
   "shot_id": "shot_010",
-  "timestamp": "2026-03-17T10:02:49.653018+00:00",
+  "timestamp": "2026-03-17T13:16:49.571012+00:00",
   "passed": false,
   "metrics": [
     {
       "name": "transfer_oracle",
-      "value": 0.6781,
+      "value": 0.0,
       "threshold": 0.7,
       "operator": ">",
       "passed": false
     },
     {
       "name": "val_oracle_gap",
-      "value": 0.2719,
+      "value": 0.95,
       "threshold": 0.15,
       "operator": "<",
       "passed": false
     },
     {
       "name": "deploy_coverage",
-      "value": 0.7118,
+      "value": 0.1,
       "threshold": 0.5,
       "operator": ">",
-      "passed": true
+      "passed": false
     }
   ]
 }
