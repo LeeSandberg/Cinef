@@ -1,0 +1,70 @@
+#usda 1.0
+# Show-level skill registry — extends Cinef framework skills
+# These skills apply across ALL scenes and shots in this film.
+(
+    doc = "Midnight Crossing — Show-Level Skill Registry"
+    customLayerData = {
+        string registry_version = "1.0.0"
+        string show = "MidnightCrossing"
+        string level = "show"
+    }
+)
+
+def Scope "ShowSkills" (
+    doc = "Skills scoped to the entire show"
+)
+{
+    def Scope "noir_grade" (
+        doc = "Noir color grade — applied after relight, before dailies"
+        customData = {
+            string id = "midnight.skill.noir_grade"
+            string version = "1.0.0"
+            string category = "color"
+            string skillFile = "skills/impl/noir_grade.skill.md"
+            string[] inputs = ["usdStage", "show_lut"]
+            string[] outputs = ["usdLayerPatch"]
+            string[] toolBindings = ["python-usd-api"]
+            string[] validation = ["gamut_coverage > 0.85", "black_crush < 0.03"]
+            string creditsPolicy = "attribution_required"
+            string level = "show"
+        }
+    )
+    {
+    }
+
+    def Scope "continuity_check" (
+        doc = "Cross-shot continuity validation — lighting and color matching"
+        customData = {
+            string id = "midnight.skill.continuity_check"
+            string version = "1.0.0"
+            string category = "validation"
+            string skillFile = "skills/impl/continuity_check.skill.md"
+            string[] inputs = ["usdStage", "adjacent_shots"]
+            string[] outputs = ["qc_report"]
+            string[] toolBindings = ["python-usd-api"]
+            string[] validation = ["color_delta_e < 3.0", "brightness_match > 0.90"]
+            string creditsPolicy = "public_domain"
+            string level = "show"
+        }
+    )
+    {
+    }
+
+    def Scope "dailies_export" (
+        doc = "Generate 1080p review proxies with burned-in metadata"
+        customData = {
+            string id = "midnight.skill.dailies_export"
+            string version = "1.0.0"
+            string category = "review"
+            string skillFile = "skills/impl/dailies_export.skill.md"
+            string[] inputs = ["usdStage", "show_lut"]
+            string[] outputs = ["proxy_media"]
+            string[] toolBindings = ["ffmpeg", "python-usd-api"]
+            string[] validation = []
+            string creditsPolicy = "public_domain"
+            string level = "show"
+        }
+    )
+    {
+    }
+}

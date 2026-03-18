@@ -1,0 +1,134 @@
+#usda 1.0
+# Example: Variant-level skill bindings inside a VariantSet
+# This shows how the "conflicted" and "stoic" performance variants
+# each carry their own skill configuration, constraints, and QC thresholds.
+#
+# This is NOT a real stage file — it's an annotated example.
+# In practice, this block lives inside a shot's base.usda.
+
+# Annotated example from shot_030 (detective close-up)
+def Xform "face_track" (
+    doc = "Detective facial performance — blendshape-driven"
+    variants = {
+        string performanceVariant = "conflicted"
+    }
+    prepend variantSets = "performanceVariant"
+    customData = {
+        # PRIM-LEVEL binding: which skills CAN operate on this prim
+        string[] cinef:skills = ["cinef.skill.lipsync", "cinef.skill.pose_track"]
+        string[] cinef:skillFiles = ["skills/impl/lipsync.skill.md", "skills/impl/pose_track.skill.md"]
+        string cinef:overridePath = "shots/shot_030/ai/"
+    }
+)
+{
+    variantSet "performanceVariant" = {
+
+        # ---------------------------------------------------------------
+        # VARIANT: conflicted
+        # The detective is processing the revelation. Internal conflict.
+        # Tight jaw, subtle brow, minimal mouth movement.
+        # ---------------------------------------------------------------
+        "conflicted" (
+            doc = "Internal conflict — processing, not reacting"
+            customData = {
+                # VARIANT-LEVEL binding: skill + variant section
+                string cinef:skill = "cinef.skill.lipsync"
+                string cinef:skillVariant = "conflicted"
+                string cinef:skillRef = "skills/impl/lipsync.skill.md#conflicted"
+                string cinef:variantDoc = "Tight, controlled — emotion visible only in micro-expressions"
+
+                # Variant-specific parameter limits
+                # These act as guardrails — the skill cannot exceed these
+                float cinef:intensity_multiplier = 0.4
+                float cinef:jawOpen_max = 0.15
+                float cinef:mouthSmile_max = 0.0
+                float cinef:browRaise_max = 0.3
+                float cinef:eyesBlink_max = 0.5
+                float cinef:jawClench_max = 0.6
+
+                # Variant-specific constraints (plain language, read by Claude)
+                string[] cinef:constraints = [
+                    "NO smile — the detective is not happy",
+                    "jaw clenching preferred over jaw opening",
+                    "brow movement only on the key revelation (frame 36)",
+                    "eyes stay open — the detective is staring",
+                    "maximum 1 blink in the entire shot"
+                ]
+
+                # Variant-specific QC thresholds (override skill defaults)
+                float cinef:qc_sync_accuracy_threshold = 0.92
+                float cinef:qc_temporal_smoothness_threshold = 0.98
+
+                # Cross-reference: pose_track variant section
+                string cinef:pose_track_ref = "skills/impl/pose_track.skill.md#conflicted"
+            }
+        ) {
+            custom float intensity_multiplier = 0.4
+            custom float blendshape:jawOpen = 0
+            custom float blendshape:jawClench = 0
+            custom float blendshape:mouthSmile = 0
+            custom float blendshape:browRaise = 0
+            custom float blendshape:eyesBlink = 0
+
+            float blendshape:jawClench.timeSamples = {
+                1: 0.0,
+                30: 0.2,
+                36: 0.5,
+                48: 0.4,
+                72: 0.3,
+            }
+            float blendshape:browRaise.timeSamples = {
+                1: 0.0,
+                34: 0.0,
+                36: 0.25,
+                40: 0.15,
+                72: 0.1,
+            }
+        }
+
+        # ---------------------------------------------------------------
+        # VARIANT: stoic
+        # Alternative read — the detective already knew.
+        # Almost no facial movement. Stone face.
+        # ---------------------------------------------------------------
+        "stoic" (
+            doc = "Already knew — no surprise, minimal reaction"
+            customData = {
+                string cinef:skill = "cinef.skill.lipsync"
+                string cinef:skillVariant = "stoic"
+                string cinef:skillRef = "skills/impl/lipsync.skill.md#stoic"
+                string cinef:variantDoc = "Stone face — the detective is unsurprised"
+
+                float cinef:intensity_multiplier = 0.2
+                float cinef:jawOpen_max = 0.05
+                float cinef:mouthSmile_max = 0.0
+                float cinef:browRaise_max = 0.05
+                float cinef:eyesBlink_max = 1.0
+
+                string[] cinef:constraints = [
+                    "almost zero facial movement — a statue",
+                    "only physiological blinks allowed",
+                    "the performance is in the EYES, not the face muscles",
+                    "any movement should be so subtle the audience questions if they saw it"
+                ]
+
+                float cinef:qc_sync_accuracy_threshold = 0.95
+                float cinef:qc_temporal_smoothness_threshold = 0.99
+            }
+        ) {
+            custom float intensity_multiplier = 0.2
+            custom float blendshape:jawOpen = 0
+            custom float blendshape:mouthSmile = 0
+            custom float blendshape:browRaise = 0
+            custom float blendshape:eyesBlink = 0
+
+            float blendshape:eyesBlink.timeSamples = {
+                1: 0.0,
+                25: 1.0,
+                27: 0.0,
+                55: 1.0,
+                57: 0.0,
+            }
+        }
+    }
+}

@@ -83,6 +83,7 @@ show/shots/shot_010/base.usda  # Wide shot — lighting + camera skills
 show/shots/shot_020/base.usda  # Close-up — facial + lip-sync skills
 show/skills/impl/*.skill.md    # 7 skill files the AI reads and follows
 advanced/transfer_gate.py      # Model validation demo (Transfer Oracle)
+examples/multi-project/        # Scaling to real productions (5-level hierarchy)
 ```
 
 ## Go Deeper
@@ -91,6 +92,7 @@ advanced/transfer_gate.py      # Model validation demo (Transfer Oracle)
 |---|---|
 | [WALKTHROUGH.md](WALKTHROUGH.md) | Step-by-step: git setup through skill chaining |
 | [DEEP_DIVE.md](DEEP_DIVE.md) | Full architecture, MCP, Agent SDK, legal compliance |
+| [PRODUCTION_GUIDE.md](PRODUCTION_GUIDE.md) | Scaling to real films: folder structure, skill scoping, multi-project |
 | [PODCAST_SCRIPT.md](PODCAST_SCRIPT.md) | Feed into [NotebookLM](https://notebooklm.google.com) for a video podcast |
 | [CLAUDE.md](CLAUDE.md) | How Claude Code sees this project |
 
