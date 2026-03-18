@@ -138,4 +138,67 @@ def Scope "Skills" (
     )
     {
     }
+
+    # -------------------------------------------------------------------
+    # SHOW-LEVEL skills — apply across ALL sequences and shots
+    # -------------------------------------------------------------------
+
+    def Scope "color_pipeline" (
+        doc = "Show-level color pipeline enforcement — ACEScg, gamut validation"
+        customData = {
+            string id = "cinef.skill.color_pipeline"
+            string version = "1.0.0"
+            string category = "color"
+            string level = "show"
+            string skillFile = "skills/impl/color_pipeline.skill.md"
+            string[] inputs = ["usdStage", "override_layer"]
+            string[] outputs = ["compliance_report"]
+            string[] toolBindings = ["python-usd-api"]
+            string[] validation = ["gamut_clipping = 0", "color_space_correct = 1"]
+            string creditsPolicy = "public_domain"
+        }
+    )
+    {
+    }
+
+    def Scope "show_review" (
+        doc = "Show-level status report — QC health, skill coverage, missing overrides"
+        customData = {
+            string id = "cinef.skill.show_review"
+            string version = "1.0.0"
+            string category = "review"
+            string level = "show"
+            string skillFile = "skills/impl/show_review.skill.md"
+            string[] inputs = ["usdStage"]
+            string[] outputs = ["show_report"]
+            string[] toolBindings = ["python-usd-api"]
+            string[] validation = []
+            string creditsPolicy = "public_domain"
+        }
+    )
+    {
+    }
+
+    # -------------------------------------------------------------------
+    # SCENE-LEVEL skills — scoped to specific sequences
+    # -------------------------------------------------------------------
+
+    def Scope "seq_010_continuity" (
+        doc = "Scene-level continuity validation — shot_010 ↔ shot_020 cut point matching"
+        customData = {
+            string id = "cinef.skill.seq_010.continuity"
+            string version = "1.0.0"
+            string category = "validation"
+            string level = "scene"
+            string scope = "seq_010"
+            string skillFile = "sequences/seq_010/skills/impl/seq_continuity.skill.md"
+            string[] inputs = ["usdStage", "shot_010", "shot_020"]
+            string[] outputs = ["continuity_report"]
+            string[] toolBindings = ["python-usd-api"]
+            string[] validation = ["key_light_angle_diff < 15", "key_light_color_delta_e < 3.0", "intensity_ratio > 0.7"]
+            string creditsPolicy = "public_domain"
+        }
+    )
+    {
+    }
 }

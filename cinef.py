@@ -820,35 +820,49 @@ def demo_agent_loop():
     print("  Composed Scene Tree")
     print("=" * 70)
     print("""
-  Show (root stage)
+  Show (root stage)                          SHOW-LEVEL SKILLS:
+  |                                            color_pipeline — ACEScg enforcement
+  |                                            show_review — pipeline health report
   |
   +-- Sequences/
   |   |
-  |   +-- seq_010/
+  |   +-- seq_010/                           SCENE-LEVEL SKILLS:
+  |       |                                    seq_continuity — shot_010 ↔ shot_020
+  |       |                                    cut point matching (lighting, color, spatial)
   |       |
-  |       +-- shot_010  [wide establishing]
-  |       |   |-- main_cam         35mm f/2.8
+  |       +-- shot_010  [wide establishing]  SHOT-LEVEL SKILLS:
+  |       |   |-- main_cam         35mm        focus_pull (cinef:skill on prim)
   |       |   |   +-- focusDistance *** AI OVERRIDE (focus_pull_v001) ***
-  |       |   |-- plate            ACEScg
-  |       |   |-- lighting
-  |       |   |   +-- [natural]    base layer
-  |       |   |   +-- [dramatic]   base variant
+  |       |   |-- plate            ACEScg      LOCKED
+  |       |   |-- lighting                     relight (cinef:skill on prim)
+  |       |   |   +-- [natural]    VARIANT:    relight.skill.md#natural
+  |       |   |   |     intensity 0.5-2.0, flicker < 0.05, cast < 0.02
+  |       |   |   +-- [dramatic]   VARIANT:    relight.skill.md#dramatic
+  |       |   |   |     intensity 0.1-5.0, key:fill >= 3:1, flicker < 0.08
   |       |   |   +-- key_light    *** AI OVERRIDE (relight_v001) ***
-  |       |   +-- protagonist_track
+  |       |   +-- protagonist_track            segment + pose_track
   |       |
-  |       +-- shot_020  [close-up reaction]
-  |           |-- main_cam         85mm f/1.4 (shallow DOF)
-  |           |-- plate            ACEScg
-  |           |-- face_track       blendshapes: jawOpen, mouthSmile, browRaise
-  |           |   +-- [subtle]     performance variant
-  |           |   +-- [intense]    performance variant
-  |           +-- audio_sync       dialogue timing markers
+  |       +-- shot_020  [close-up reaction]  SHOT-LEVEL SKILLS:
+  |           |-- main_cam         85mm f/1.4  LOCKED (fixed close-up)
+  |           |-- plate            ACEScg      LOCKED
+  |           |-- face_track                   lipsync + pose_track
+  |           |   +-- [subtle]     VARIANT:    lipsync.skill.md#subtle
+  |           |   |     peaks <= 0.3, smoothness > 0.97
+  |           |   +-- [intense]    VARIANT:    lipsync.skill.md#intense
+  |           |         peaks <= 1.0, smoothness > 0.93
+  |           +-- audio_sync       dialogue    lipsync (input only)
   |
   +-- Assets/
       +-- protagonist              skeleton + face blendshapes
 
+  SKILL HIERARCHY:
+    Show level   → color_pipeline, show_review     (apply to ALL shots)
+    Scene level  → seq_continuity                   (seq_010 shots only)
+    Shot level   → relight, focus_pull, lipsync...  (bound to specific prims)
+    Variant level → #natural, #dramatic, #subtle... (per-variant constraints)
+
   Legend: *** = AI override layer (non-destructive, sparse, versioned)
-          [brackets] = VariantSet options (switchable)
+          [brackets] = VariantSet options (each with its own skill config)
 """)
 
     # --- Summary ---
@@ -861,11 +875,14 @@ def demo_agent_loop():
     show/shots/shot_010/ai/relight_v001.usda     -- Lighting
     show/shots/shot_010/qc/focus_pull_qc.json    -- QC report
 
-  shot_010 vs shot_020 — each shot owns its own standard:
-    shot_010: lighting VariantSets + camera tracking  (relight, focus_pull)
-    shot_020: performance VariantSets + face tracking  (lipsync, pose_track)
+  Five levels of skills — each inherits downward, never leaks sideways:
+    Framework:  meta, git_onboard                 (universal, ship with Cinef)
+    Show:       color_pipeline, show_review       (apply to all shots in the film)
+    Scene:      seq_continuity                    (validate cuts within seq_010)
+    Shot:       relight, focus_pull, lipsync...   (bound to prims via cinef:skill)
+    Variant:    #natural, #dramatic, #subtle...   (per-variant constraints + QC)
 
-  Try it yourself — open Claude Code in this directory and type:
+  Try it yourself — open this directory in any AI coding agent and type:
 
     "What shots are in the show? What skills can I run on each?"
 
@@ -875,7 +892,10 @@ def demo_agent_loop():
 
     "Generate lip-sync animation for shot_020 from dialogue audio"
 
+    "Check continuity between shot_010 and shot_020"
+
   See WALKTHROUGH.md for the full interactive guide.
+  See PRODUCTION_GUIDE.md for scaling to real multi-film projects.
 """)
 
 

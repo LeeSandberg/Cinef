@@ -26,6 +26,10 @@
         string cinef:skillRegistry = "skills/skills.usda"
         string cinef:skillSchema = "skills/skills.schema.json"
         string cinef:instructions = "Parse each referenced shot. Look for cinef:skill and cinef:skills in customData on prims. Read the linked skill.md before modifying any prim."
+        # Show-level skills (apply to ALL shots):
+        string cinef:showSkills = "skills/impl/color_pipeline.skill.md, skills/impl/show_review.skill.md"
+        # Scene-level skills (check sequences/ directories for per-sequence skills and CLAUDE.md):
+        string cinef:sequencePath = "sequences/"
     }
 )
 
