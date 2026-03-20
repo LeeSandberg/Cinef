@@ -68,7 +68,8 @@ can run this pipeline.
 [Get Shit Done  GSD Free meta-prompt skills Recommended](https://github.com/gsd-build/get-shit-done),
 [Anthropics Claude Code Skill Resources on GitHub](https://github.com/anthropics/skills),
 [Let different AI chat and work with a scene](
-https://github.com/ailabs-393/agentchattr)
+https://github.com/ailabs-393/agentchattr),
+[Blender Free 3D Edutor with MCP AI Interface](https://github.com/ahujasid/blender-mcp)
 
 **Custom agents built on any LLM SDK:**
 OpenAI, Anthropic, Google Gemini, Llama, Mistral — if it can read a file
