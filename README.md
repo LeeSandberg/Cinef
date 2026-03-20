@@ -65,7 +65,8 @@ can run this pipeline.
 [GitHub Copilot Workspace](https://githubnext.com/projects/copilot-workspace),
 [Skill security Skill Scanner](https://github.com/cisco-ai-defense/skill-scanner),
 [PDF Resource how to design skills](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf),
-[Get Shit Done  GSD Free meta-prompt skills Recommended](https://github.com/gsd-build/get-shit-done)
+[Get Shit Done  GSD Free meta-prompt skills Recommended](https://github.com/gsd-build/get-shit-done),
+[Anthropics Claude Code Skill Resources on GitHub](https://github.com/anthropics/skills)
 
 **Custom agents built on any LLM SDK:**
 OpenAI, Anthropic, Google Gemini, Llama, Mistral — if it can read a file
