@@ -69,7 +69,7 @@ can run this pipeline.
 [Anthropics Claude Code Skill Resources on GitHub](https://github.com/anthropics/skills),
 [Let different AI chat and work with a scene](
 https://github.com/ailabs-393/agentchattr),
-[Blender Free 3D Edutor with MCP AI Interface](https://github.com/ahujasid/blender-mcp)
+[Blender Free 3D Editor with MCP AI Interface](https://github.com/ahujasid/blender-mcp)
 
 **Custom agents built on any LLM SDK:**
 OpenAI, Anthropic, Google Gemini, Llama, Mistral — if it can read a file
