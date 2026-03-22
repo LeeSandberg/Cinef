@@ -182,4 +182,4 @@ python3 advanced/transfer_gate.py --all   # SAFE / UNDERTRAINED / RED_FLAG
 Copyright 2026 Lee Sandberg. **AGPL-3.0** — see [LICENSE](LICENSE).
 
 Fork it, learn from it, build on it. Derivatives stay open source.
-For commercial licensing or totally full version set up on a "Clawbot" server service, too your simulation/game/film project: **lee.sandberg@gmail.com** (subject: **"Cinef"**).
+For commercial licensing or totally full version set up on a "Clawbot" server service, for Your simulation/game/film/art project: **lee.sandberg@gmail.com** (subject: **"Cinef"**).
