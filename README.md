@@ -56,6 +56,7 @@ structured output. Any agent that can read files and follow instructions
 can run this pipeline.
 
 **Agentic coding tools:**
+[Must have GitHub CLI](https://cli.github.com/)
 [Claude Code](https://docs.anthropic.com/en/docs/claude-code),
 [Cursor](https://cursor.com),
 [Windsurf](https://windsurf.com),
