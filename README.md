@@ -58,6 +58,7 @@ can run this pipeline.
 **Agentic coding tools:**
 [Must have GitHub CLI](https://cli.github.com/)
 [Claude Code](https://docs.anthropic.com/en/docs/claude-code),
+[Learning Claude code](https://youtu.be/TwkdDcO4vWQ?is=F4-vcR-GqvEsPcT-),
 [Cursor](https://cursor.com),
 [Windsurf](https://windsurf.com),
 [Cline](https://github.com/cline/cline),
