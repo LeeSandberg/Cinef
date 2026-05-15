@@ -56,7 +56,8 @@ structured output. Any agent that can read files and follow instructions
 can run this pipeline.
 
 **Agentic coding tools:**
-[Must have GitHub CLI](https://cli.github.com/)
+[Use Claude to build 3D scene from an image, Vision Add CineF USD File skill support to this](https://github.com/LeeSandberg/image-blaster),
+[Must have GitHub CLI](https://cli.github.com/),
 [Claude Code](https://docs.anthropic.com/en/docs/claude-code),
 [Learning Claude code](https://youtu.be/TwkdDcO4vWQ?is=F4-vcR-GqvEsPcT-),
 [Cursor](https://cursor.com),
